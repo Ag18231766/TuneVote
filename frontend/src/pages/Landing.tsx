@@ -46,22 +46,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      
-
-      {/* Join Section */}
-      <section id="join" className="w-full py-12 bg-gray-800">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-8">Join Our Community</h2>
-          <p className="text-lg text-gray-400 mb-8">
-            Ready to start sharing and discovering music? Join us today and be part of a growing community of music lovers.
-          </p>
-          <a href="#" className="bg-blue-600 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-blue-700">
-            Sign Up Now
-          </a>
-        </div>
-      </section>
-
-      
     </div>
   );
 }
@@ -84,7 +68,7 @@ export function AppBar({isLanding}:{isLanding:boolean}){
           <ul className="flex space-x-6">
           <li>
           <button onClick={handleLogin}>Login</button>
-          {!isLanding ? <Link to="/" className="hover:underline">Logout</Link> : null}
+          {!isLanding ? <Link to="/" onClick={() => logout()} className="hover:underline">Logout</Link> : null}
           </li>
           </ul>
           
