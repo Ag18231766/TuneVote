@@ -1,35 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import Dashboard from './pages/Dashboard'
+import Landing from './pages/Landing'
+
+import Login from './pages/Login'
+import LogoutButton from './pages/Logout'
+import Creator from './pages/Creator'
+import { CreatorAfterLogin } from './pages/CreatorAfterLogin'
+
+
+
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  
+  
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    
+    
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Landing></Landing>} ></Route>
+        <Route path='/authorize' element={<Login></Login>}></Route>
+        <Route path='/logout' element={<LogoutButton></LogoutButton>}></Route>
+        <Route path='/dashboard' element={<Dashboard></Dashboard>}></Route>
+        <Route path='/creator/:creatorId' element={<Creator></Creator>}></Route>
+        <Route path='/creatorLogedin/:creatorId' element={<CreatorAfterLogin></CreatorAfterLogin>}></Route>
+      </Routes>
+    </BrowserRouter>
   )
 }
 
-export default App
+
+export default App;
