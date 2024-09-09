@@ -39,7 +39,7 @@ export function CreatorAfterLogin(){
                 <div className="ml-5">TuneVote</div>
                 <div className="mr-5 cursor-pointer" onClick={handleLogout}>Logout</div>
             </div>
-            {IsAuthorized ? <StreamView creatorId={creatorId ?? ""} playVideo={true} token={localStorage.getItem('token') ?? " "} userId={user?.sub?.split('|')[1] as string}  ></StreamView> : null}
+            {IsAuthorized ? <StreamView creatorId={creatorId ?? ""} token={localStorage.getItem('token') ?? " "} userId={user?.sub?.split('|')[1] as string}  ></StreamView> : null}
         </div>
     )
 }

@@ -28,23 +28,17 @@ const YT_REGEX = new RegExp(/^(?:(?:https?:)?\/\/)?(?:www\.)?(?:m\.)?(?:youtu(?:
 
 export default function StreamView({
     creatorId,
-    playVideo,
     token,
     userId
 }:{
     creatorId:string,
-    playVideo:boolean,
     token:string,
     userId:string
 }){
     const [inputLink,setInputLink] = useState('');
     const [queue, setQueue] = useState<RefreshResponse[]>([])
     const [currentVideo, setCurrentVideo] = useState<Video | null>(null);
-    const [loading, setLoading] = useState(false);
-    // const [playNextLoader, setPlayNextLoader] = useState(false);
     const videoPlayerRef = useRef<HTMLDivElement>(null);
-    // const [creatorUserId, setCreatorUserId] = useState<string | null>(null)
-    // const [isCreator, setIsCreator] = useState(false)
     const count = useRef<number>(0);
     const refreshStreams = useCallback(async function (){
         count.current++;
@@ -73,9 +67,7 @@ export default function StreamView({
         })
         
 
-        // Set the creator's ID
-        // setCreatorUserId(res.data.creatorId);
-        // setIsCreator(res.data.isCreator);
+      
     
     },[creatorId,token,userId]);
 
@@ -146,7 +138,7 @@ export default function StreamView({
             toast.error("Invalid YouTube URL format")
             return
         }
-        setLoading(true)
+        
         try {
             const res = await axios.post<RefreshResponse | {message:string}>(`http://localhost:3000/api/v1/streams/`,{
                 creatorId:creatorId,
@@ -168,9 +160,7 @@ export default function StreamView({
             } else {
                 toast.error("An unexpected error occurred")
             }
-        } finally {
-            setLoading(false)
-        }
+        } 
     }
     
     const handleShare = () => {

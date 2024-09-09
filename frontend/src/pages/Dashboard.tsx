@@ -1,8 +1,8 @@
 import { useAuth0 } from "@auth0/auth0-react"
 import axios from "axios";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import StreamView from "./StreamView";
-import { useNavigate } from "react-router-dom";
+
 
 
 export default function Dashboard(){
@@ -40,7 +40,7 @@ export default function Dashboard(){
                 <div className="ml-5">TuneVote</div>
                 <div className="mr-5 cursor-pointer" onClick={handleLogout}>Logout</div>
             </div>
-            {isAuthorized ? <StreamView userId={user?.sub?.split('|')[1] ?? ''} creatorId={user?.sub?.split('|')[1] ?? ''} playVideo={true} token={localStorage.getItem('token') ?? " "}  ></StreamView> : null}
+            {isAuthorized ? <StreamView userId={user?.sub?.split('|')[1] ?? ''} creatorId={user?.sub?.split('|')[1] ?? ''}  token={localStorage.getItem('token') ?? " "}  ></StreamView> : null}
         </div>
     )
 }
