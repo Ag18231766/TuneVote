@@ -47,6 +47,8 @@ export default function StreamView({
     // const [isCreator, setIsCreator] = useState(false)
     const count = useRef<number>(0);
     const refreshStreams = useCallback(async function (){
+        count.current++;
+        console.log(count.current);
         const res = await axios.get<{streams:RefreshResponse[],activeStream:{stream:RefreshResponse},isCreator:boolean,creatorId:string}>(`http://localhost:3000/api/v1/streams/?creatorId=${creatorId}&&userId=${userId}`,{
             headers:{
                 authorization : 'Bearer ' + token
@@ -61,14 +63,15 @@ export default function StreamView({
             setQueue([])
         }
         
-        // setCurrentVideo(video => {
-        //     if (video?.id === res.data.activeStream?.stream?.id) {
-        //         return video
-        //     }
-        //     return video = res.data.activeStream?.stream || null
-        // })
-        count.current++;
-        console.log(count.current);
+        setCurrentVideo(video => {
+            if (res.data.activeStream !== null) {
+                video = res.data.activeStream?.stream;
+                return video;
+            }else{
+                return null
+            }
+        })
+        
 
         // Set the creator's ID
         // setCreatorUserId(res.data.creatorId);
@@ -90,29 +93,45 @@ export default function StreamView({
 
     },[refreshStreams]);
 
-    const OnEnding = useCallback( async function (){
+    const OnEnding = useCallback( async function (fromButton:boolean){
+        console.log('hi there');
         
-        await axios.get<{mostUpvotedStream:Video}>(`http://localhost:3000/api/v1/streams/next/?creatorId=${creatorId}`,{
+        await axios.get<{mostUpvotedStream:Video}>(`http://localhost:3000/api/v1/streams/next/?creatorId=${creatorId}&&fromButton=${fromButton}`,{
             headers:{
                 authorization : 'Bearer ' + token
             }
         }).then((res) => {
+
+            if('message' in res.data){
+                setCurrentVideo(() => null);
+                return;
+            }
             setCurrentVideo(() => {
                 return res.data.mostUpvotedStream
             })
-            setQueue((prev) => {
-                return prev.filter((t) => {
-                    return res.data.mostUpvotedStream.id !== t.id
-                }).sort((a:RefreshResponse,b:RefreshResponse) => b.upvotes - a.upvotes)
-            })
+
+            if(res.data.mostUpvotedStream !== null){
+                setQueue((prev) => {
+                    if(prev.length > 0){
+                        return prev.filter((t) => {
+                            return res.data.mostUpvotedStream.id !== t.id
+                        }).sort((a:RefreshResponse,b:RefreshResponse) => b.upvotes - a.upvotes)
+                    }else{
+                        return prev;
+                    }
+                })
+            }
         })
+        
         
     },[creatorId,token])
 
 
     useEffect(() => {
-        OnEnding();
-    },[OnEnding]);
+        if(userId === creatorId){
+            OnEnding(false);
+        }
+    },[OnEnding,userId,creatorId]);
 
     
    
@@ -213,18 +232,18 @@ export default function StreamView({
                         thumbnail
                         controls={true}
                         progressInterval={1000}
-                        onEnded={OnEnding}
+                        onEnded={() => OnEnding(true)}
                         width={384} 
                         height={384} 
                     />
                 </div>
                 <div className="mt-4">
-                    <button 
-                        onClick={OnEnding} 
+                    {userId === creatorId ? <button 
+                        onClick={() => OnEnding(true)} 
                         className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md shadow-md"
                     >
                         Play Next
-                    </button>
+                    </button> : null}
                 </div>
                 <form onSubmit={handleSubmit} className="mt-6">
                     <label 

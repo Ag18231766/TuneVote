@@ -34,11 +34,11 @@ export function CreatorAfterLogin(){
    
     
     return (
-        <div>
-            <button onClick={handleLogout}>logout</button>
-            Dashboard
-            
-            {user?.sub}
+        <div className="bg-black h-screen">
+            <div className="flex items-center justify-between h-12 bg-gray-700 text-white">
+                <div className="ml-5">TuneVote</div>
+                <div className="mr-5 cursor-pointer" onClick={handleLogout}>Logout</div>
+            </div>
             {IsAuthorized ? <StreamView creatorId={creatorId ?? ""} playVideo={true} token={localStorage.getItem('token') ?? " "} userId={user?.sub?.split('|')[1] as string}  ></StreamView> : null}
         </div>
     )

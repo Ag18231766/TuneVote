@@ -38,7 +38,7 @@ export default function Dashboard(){
         <div>
             <div className="flex items-center justify-between h-12 bg-gray-700 text-white">
                 <div className="ml-5">TuneVote</div>
-                <div className="mr-5 cursor-pointer" onClick={() => logout()}>Logout</div>
+                <div className="mr-5 cursor-pointer" onClick={handleLogout}>Logout</div>
             </div>
             {isAuthorized ? <StreamView userId={user?.sub?.split('|')[1] ?? ''} creatorId={user?.sub?.split('|')[1] ?? ''} playVideo={true} token={localStorage.getItem('token') ?? " "}  ></StreamView> : null}
         </div>
