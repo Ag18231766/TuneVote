@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import YouTubePlayer from 'react-player/youtube';
 import { toast } from 'react-toastify'
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
 interface Video {
     id: string;
     type: string;
@@ -23,7 +24,7 @@ interface RefreshResponse extends Video{
     upvotes:number,
 }
 
-const REFRESH_INTERVAL_MS = 20 * 1000;
+const REFRESH_INTERVAL_MS = 15 * 1000;
 const YT_REGEX = new RegExp(/^(?:(?:https?:)?\/\/)?(?:www\.)?(?:m\.)?(?:youtu(?:be)?\.com\/(?:v\/|embed\/|watch(?:\/|\?v=))|youtu\.be\/)((?:\w|-){11})(?:\S+)?$/);
 
 export default function StreamView({
@@ -43,7 +44,7 @@ export default function StreamView({
     const refreshStreams = useCallback(async function (){
         count.current++;
         console.log(count.current);
-        const res = await axios.get<{streams:RefreshResponse[],activeStream:{stream:RefreshResponse},isCreator:boolean,creatorId:string}>(`http://localhost:3000/api/v1/streams/?creatorId=${creatorId}&&userId=${userId}`,{
+        const res = await axios.get<{streams:RefreshResponse[],activeStream:{stream:RefreshResponse},isCreator:boolean,creatorId:string}>(`${apiUrl}/api/v1/streams/?creatorId=${creatorId}&&userId=${userId}`,{
             headers:{
                 authorization : 'Bearer ' + token
             }
@@ -88,7 +89,7 @@ export default function StreamView({
     const OnEnding = useCallback( async function (fromButton:boolean){
         console.log('hi there');
         
-        await axios.get<{mostUpvotedStream:Video}>(`http://localhost:3000/api/v1/streams/next/?creatorId=${creatorId}&&fromButton=${fromButton}`,{
+        await axios.get<{mostUpvotedStream:Video}>(`${apiUrl}/api/v1/streams/next/?creatorId=${creatorId}&&fromButton=${fromButton}`,{
             headers:{
                 authorization : 'Bearer ' + token
             }
@@ -140,7 +141,7 @@ export default function StreamView({
         }
         
         try {
-            const res = await axios.post<RefreshResponse | {message:string}>(`http://localhost:3000/api/v1/streams/`,{
+            const res = await axios.post<RefreshResponse | {message:string}>(`${apiUrl}/api/v1/streams/`,{
                 creatorId:creatorId,
                 url:inputLink
             },{
@@ -185,7 +186,7 @@ export default function StreamView({
         ).sort((a, b) => b.upvotes - a.upvotes));
         
         if(isUpvote){
-            await axios.post<{message:string}>(`http://localhost:3000/api/v1/streams/upvote`,{
+            await axios.post<{message:string}>(`${apiUrl}/api/v1/streams/upvote`,{
                 streamId:id
             },{
                 headers:{
@@ -193,7 +194,7 @@ export default function StreamView({
                 }
             })
         }else{
-            await axios.post<{message:string}>(`http://localhost:3000/api/v1/streams/downvote`,{
+            await axios.post<{message:string}>(`${apiUrl}/api/v1/streams/downvote`,{
                 streamId:id
             },{
                 headers:{

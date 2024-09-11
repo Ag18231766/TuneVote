@@ -2,7 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react"
 import axios from "axios";
 import { useEffect, useState } from "react";
 import StreamView from "./StreamView";
-
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
 
 export default function Dashboard(){
@@ -11,7 +11,7 @@ export default function Dashboard(){
    
     useEffect(() => {
         console.log(user);
-        axios.post<{message:string}>(`http://localhost:3000/api/v1/user/${user?.email}`,{},{
+        axios.post<{message:string}>(`${apiUrl}/api/v1/user/${user?.email}`,{},{
             headers:{
                 authorization: 'Bearer ' + localStorage.getItem('token')
             }

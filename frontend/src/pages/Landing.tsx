@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 export default function LandingPage() {
   return (
+    
     <div className="min-h-screen bg-gray-800 text-white flex flex-col items-center">
       {/* Header */}
       <header className="w-full py-4 bg-gray-800">

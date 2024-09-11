@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import StreamView from "./StreamView";
 import axios from "axios";
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
+
 
 export function CreatorAfterLogin(){
     const {user,logout} = useAuth0();
@@ -10,7 +12,7 @@ export function CreatorAfterLogin(){
     const {creatorId} = useParams<string>();
     useEffect(() => {
         console.log(user);
-        axios.post<{message:string}>(`http://localhost:3000/api/v1/user/${user?.email}`,{},{
+        axios.post<{message:string}>(`${apiUrl}/api/v1/user/${user?.email}`,{},{
             headers:{
                 authorization: 'Bearer ' + localStorage.getItem('token')
             }
